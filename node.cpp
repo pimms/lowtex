@@ -152,10 +152,34 @@ Surface render(NodeVector nodes)
 	Surface surf;
 	int chx = 0;
 
-	for (NodePtr ch : nodes) {
-		Surface sub = render(ch);
+	int i=0;
+	while (i < nodes.size()) {
+		NodePtr node = nodes[i];
+
+		// Check for special case where sub- and super-script
+		// preceed one another (in either  order)
+		if (i+1 < nodes.size()) {
+			NodePtr next = nodes[i+1];
+
+			if ((next->getText() == "^" || next->getText() == "_") &&
+				(node->getText() == "^" || node->getText() == "_") &&
+				node->getText() != next->getText()) {
+				Surface s1, s2;
+				s1 = render(node);
+				s2 = render(next);
+				surf.addSurface(chx, s1);
+				surf.addSurface(chx, s2);
+				chx += surfMaxW(s1, s2);
+				i += 2;
+				continue;
+			}
+		}
+
+		Surface sub = render(node);
 		surf.addSurface(chx, sub);
 		chx += sub.getBox().w;
+
+		i++;
 	}
 
 	return surf;

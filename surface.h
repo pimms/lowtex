@@ -13,6 +13,10 @@ struct Box
 	int h;
 };
 
+/**
+ * Magic numbers used when recursively adding surfaces atop
+ * one another. See Surface::addSurface.
+ */
 enum YAlign
 {
 	BELOW_ZERO = 0x913485,
@@ -22,6 +26,10 @@ enum YAlign
 	TOP_AT_ZERO = 0x913488,
 };
 
+/**
+ * 2D-container of characters. Allows dynamic resizing
+ * and Y-axis positioning.
+ */
 class Surface
 {
 public:
