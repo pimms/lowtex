@@ -126,12 +126,15 @@ static Surface renderRoot(NodePtr node)
 {
 	Surface surf;
 	Surface root;
-	Surface square;
+	Surface radical;
 
 	root = render(node->getChildren(0));
-	square = render(node->getChildren(1));
 
-	surf.addSurface(root.getBox().w - 1, square);
+	NodePtr fakeSqrt = std::make_shared<Node>(CMD, "sqrt");
+	fakeSqrt->absorb(node->getChildren(1), 0);
+	radical = renderSqrt(fakeSqrt);
+
+	surf.addSurface(root.getBox().w - 1, radical);
 	surf.addSurface(0, root, 1);
 	return surf;
 }
